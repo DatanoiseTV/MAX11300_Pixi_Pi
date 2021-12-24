@@ -245,6 +245,9 @@ public:
   uint32_t readAnalog(int channel);
   uint32_t writeAnalog(int channel, uint32_t value);
 
+  uint32_t setChannelType(int channel, uint32_t type);
+  uint32_t getChannelType(int channel);
+
 private:
   int _channel;
   int _temp_channel;

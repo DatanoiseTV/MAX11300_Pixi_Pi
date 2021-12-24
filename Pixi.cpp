@@ -119,7 +119,7 @@ uint32_t Pixi::configChannel(int channel, int channel_mode, uint32_t dac_dat,
       // config DACREF (internal reference),DACCTL (sequential update)
       info = ReadRegister(PIXI_DEVICE_CTRL, true);
       WriteRegister(PIXI_DEVICE_CTRL, info | DACREF | !DACCTL);
-      
+
       info = ReadRegister(PIXI_DEVICE_CTRL, true);
       // Enter DACDAT
       WriteRegister(PIXI_DAC_DATA + channel, dac_dat);
@@ -129,7 +129,7 @@ uint32_t Pixi::configChannel(int channel, int channel_mode, uint32_t dac_dat,
             PIXI_PORT_CONFIG + channel,
             (((CH_MODE_1 << 12) & FUNCID) | ((range << 8) & FUNCPRM_RANGE)));
       };
-      
+
       // Mode3: config GPO_DAT, leave channel at logic level 0
       if (channel_mode == CH_MODE_3) {
         if (channel <= 15) {
@@ -152,12 +152,11 @@ uint32_t Pixi::configChannel(int channel, int channel_mode, uint32_t dac_dat,
              // assoc port & FUNCPRM_ASSOCIATED_PORT
              ));
       }
-      
+
       // Mode1: config GPIMD (leave at default INT never asserted
       if (channel_mode == CH_MODE_1) {
         //        WriteRegister ( PIXI_GPI_IRQ_MODE_0_7, 0 );
       }
-      
 
     }
 
@@ -170,19 +169,17 @@ uint32_t Pixi::configChannel(int channel, int channel_mode, uint32_t dac_dat,
             PIXI_PORT_CONFIG + channel,
             (((channel_mode << 12) & FUNCID) | ((range << 8) & FUNCPRM_RANGE)));
       }
-      
+
       if (channel_mode == CH_MODE_7 || channel_mode == CH_MODE_8) {
         WriteRegister(PIXI_PORT_CONFIG + channel,
                       (((channel_mode << 12) & FUNCID) |
                        ((range << 8) & FUNCPRM_RANGE) |
                        ((1 << 5)) & FUNCPRM_NR_OF_SAMPLES));
       }
-      
 
       // config ADCCTL
       info = ReadRegister(PIXI_DEVICE_CTRL, false);
       WriteRegister(PIXI_DEVICE_CTRL, info | (adc_ctl & ADCCTL));
-      
 
     } else if (channel_mode == CH_MODE_2 || channel_mode == CH_MODE_11 ||
                channel_mode == CH_MODE_12) {
@@ -282,4 +279,18 @@ uint32_t Pixi::readAnalog(int channel) {
   }
 
   return (result);
+}
+uint32_t Pixi::setChannelType(int channel, uint32_t type) {
+  uint32_t channel_func = 0;
+  uint32_t orig = ReadRegister(PIXI_PORT_CONFIG + channel, false);
+  WriteRegister(PIXI_PORT_CONFIG + channel, orig | (type << 12));
+
+  return 0;
+}
+
+uint32_t Pixi::getChannelType(int channel) {
+  uint32_t channel_func = 0;
+  channel_func = ReadRegister(PIXI_PORT_CONFIG + channel, false);
+  channel_func = (channel_func & FUNCID) >> 12;
+  return channel_func;
 }
