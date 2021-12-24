@@ -1,10 +1,8 @@
 #include "Pixi.h"
 #include <cstdio>
 
-#define _DEFAULT_SOURCE /* needed for usleep() */
 #include <stdlib.h>
 #include <unistd.h>
-#define SDL_MAIN_HANDLED
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_thread.h>
 #include <math.h>
@@ -61,6 +59,8 @@ void PIXI_random() {
 
 static int tick_thread(void *data) {
   (void)data;
+
+  printf("Starting Tick thread.\n");
 
   while (1) {
     PIXI_random();

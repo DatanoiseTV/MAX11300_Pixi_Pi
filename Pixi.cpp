@@ -119,7 +119,7 @@ uint32_t Pixi::configChannel(int channel, int channel_mode, uint32_t dac_dat,
       // config DACREF (internal reference),DACCTL (sequential update)
       info = ReadRegister(PIXI_DEVICE_CTRL, true);
       WriteRegister(PIXI_DEVICE_CTRL, info | DACREF | !DACCTL);
-      delay(1);
+      
       info = ReadRegister(PIXI_DEVICE_CTRL, true);
       // Enter DACDAT
       WriteRegister(PIXI_DAC_DATA + channel, dac_dat);
@@ -129,7 +129,7 @@ uint32_t Pixi::configChannel(int channel, int channel_mode, uint32_t dac_dat,
             PIXI_PORT_CONFIG + channel,
             (((CH_MODE_1 << 12) & FUNCID) | ((range << 8) & FUNCPRM_RANGE)));
       };
-      delay(1);
+      
       // Mode3: config GPO_DAT, leave channel at logic level 0
       if (channel_mode == CH_MODE_3) {
         if (channel <= 15) {
@@ -152,12 +152,12 @@ uint32_t Pixi::configChannel(int channel, int channel_mode, uint32_t dac_dat,
              // assoc port & FUNCPRM_ASSOCIATED_PORT
              ));
       }
-      delay(1);
+      
       // Mode1: config GPIMD (leave at default INT never asserted
       if (channel_mode == CH_MODE_1) {
         //        WriteRegister ( PIXI_GPI_IRQ_MODE_0_7, 0 );
       }
-      delay(1);
+      
 
     }
 
@@ -170,21 +170,19 @@ uint32_t Pixi::configChannel(int channel, int channel_mode, uint32_t dac_dat,
             PIXI_PORT_CONFIG + channel,
             (((channel_mode << 12) & FUNCID) | ((range << 8) & FUNCPRM_RANGE)));
       }
-      delay(1);
+      
       if (channel_mode == CH_MODE_7 || channel_mode == CH_MODE_8) {
-        printf("Setting number of samples..\n");
         WriteRegister(PIXI_PORT_CONFIG + channel,
                       (((channel_mode << 12) & FUNCID) |
                        ((range << 8) & FUNCPRM_RANGE) |
                        ((1 << 5)) & FUNCPRM_NR_OF_SAMPLES));
       }
-      delay(1);
+      
 
       // config ADCCTL
-      printf("Configuring ADC.\n");
       info = ReadRegister(PIXI_DEVICE_CTRL, false);
       WriteRegister(PIXI_DEVICE_CTRL, info | (adc_ctl & ADCCTL));
-      delay(1);
+      
 
     } else if (channel_mode == CH_MODE_2 || channel_mode == CH_MODE_11 ||
                channel_mode == CH_MODE_12) {
