@@ -17,16 +17,12 @@ float voltageScaler = (1 << 12) / 10;
 static int tick_thread(void *data);
 
 int main(int argc, char **argv) {
-
-  printf("Hallochen!\n");
-
   uint32_t Pixi_ID = 0;
   float Temp = 0;
   uint32_t test = 0;
 
   Pixi_ID = pixi.config();
 
-  printf("%08x\n", Pixi_ID);
   if (Pixi_ID == 0x0424) {
 
     test = pixi.readRawTemperature(TEMP_CHANNEL_INT);
