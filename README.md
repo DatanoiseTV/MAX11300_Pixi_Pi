@@ -15,6 +15,19 @@ CV, but not audio rate signals. It might be possible to tune it to run at
 higher speeds.
 
 
+## Prerequisites
+
+* libsdl2
+* liblo
+* libbcm2835
+
+You can get libsdl and liblo on a Debian/Ubuntu System by using
+```
+$ sudo apt install -y libsdl2-dev liblo-dev
+```
+
+You will need to obtain libbcm2835 manually from the libbcm2835 page
+and compile and install it manually.
 
 ## Building
 
